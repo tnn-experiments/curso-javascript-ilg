@@ -3,8 +3,8 @@
 
 // questão 1
 // ----------------------------
-var num_1 = parseInt( document.getElementById('num_1').innerHTML );
-var num_2 = parseInt( document.getElementById('num_2').innerHTML );
+var num_1 = parseFloat( document.getElementById('num_1').innerHTML );
+var num_2 = parseFloat( document.getElementById('num_2').innerHTML );
 var resultado = num_1 + num_2;
 
 document.getElementById('resultado').innerHTML = '<strong>' + resultado + '</strong>';
@@ -12,11 +12,7 @@ document.getElementById('resultado').innerHTML = '<strong>' + resultado + '</str
 // questão 2
 // ----------------------------
 function converte_celsius_para_fahrenheit(celsius) {
-    var celsius;
-    var resultado_fahrenheit;
-    
-    resultado_fahrenheit = (9 * celsius / 5) + 32;
-
+    var resultado_fahrenheit = (9 * celsius / 5) + 32;
     return resultado_fahrenheit;
 };
 
@@ -55,14 +51,18 @@ var curso = {
     'n_aval_2_estrelas': 20,
     'n_aval_1_estrela': 4,
     'total_avaliacoes' : function(){
-        total = this.n_aval_1_estrela + this.n_aval_2_estrelas + this.n_aval_3_estrelas + this.n_aval_4_estrelas + this.n_aval_5_estrelas;
+        var total = this.n_aval_5_estrelas + this.n_aval_4_estrelas + this.n_aval_3_estrelas + this.n_aval_2_estrelas + this.n_aval_1_estrela;
         return total;
     },
     'media_avaliacoes': function(){
-        media = ( (1 * this.n_aval_1_estrela) + (2 * this.n_aval_2_estrelas) + (3 * this.n_aval_3_estrelas) + (4 * this.n_aval_4_estrelas) + (5 * this.n_aval_5_estrelas) / (this.n_aval_1_estrela + this.n_aval_2_estrelas + this.n_aval_3_estrelas) + (this.n_aval_4_estrelas) + (this.n_aval_5_estrelas));
+        var media = ( ((5 * this.n_aval_5_estrelas) + (4 * this.n_aval_4_estrelas) + (3 * this.n_aval_3_estrelas) + (2 * this.n_aval_2_estrelas) + (1 * this.n_aval_1_estrela)) / ( this.n_aval_5_estrelas + this.n_aval_4_estrelas + this.n_aval_3_estrelas + this.n_aval_2_estrelas + this.n_aval_1_estrela ) );
         return media;
     }
 }
+
+
+
+
 
 // 4.a
 var valor_cat_principal = curso.categoria[0];
@@ -72,7 +72,7 @@ document.getElementById('categoria_principal').innerHTML = valor_cat_principal;
 var valor_total_aval = curso.total_avaliacoes();
 document.getElementById('total_aval').innerHTML = valor_total_aval;
 
-var valor_media_aval = curso.media_avaliacoes();
+var valor_media_aval = curso.media_avaliacoes().toFixed(2);
 document.getElementById('media_aval').innerHTML = valor_media_aval;
 
 // questão 5
@@ -84,16 +84,20 @@ var ficha = {
 }
 
 function estrutura_ficha(param){
-    var htmlAbreTr = '<tr>';
-    var htmlAbreTd = '<td>';
-    var htmlFechaTr = '</tr>';
-    var htmlFechaTd = '</td>';
-    
-    var html1 = htmlAbreTr + htmlAbreTd + 'Nome Completo' + htmlFechaTd + htmlAbreTd + 'Email' + htmlFechaTd + htmlFechaTr;
-    var html2 = htmlAbreTr + htmlAbreTd + param.nome + param.sobrenome + htmlFechaTd + htmlAbreTd + param.email + htmlFechaTd + htmlFechaTr;
-    var html = html1 + html2;
+    var tabelaHTML = '<div class="tableBox">';
+    tabelaHTML +=       '<table>';
+    tabelaHTML +=           '<tr>';
+    tabelaHTML +=               '<th>Nome Completo</th>';
+    tabelaHTML +=               '<th>Email</th>'; 
+    tabelaHTML +=           '</tr>';
+    tabelaHTML +=           '<tr>';
+    tabelaHTML +=               '<td>'+param.nome+' '+param.sobrenome+'</td>';
+    tabelaHTML +=               '<td>'+param.email+'</td>';
+    tabelaHTML +=           '</tr>';
+    tabelaHTML +=        '</table>';
+    tabelaHTML +=   '</div>';
 
-    return html;
+    return tabelaHTML;
 }
 
 document.getElementById('tabela').innerHTML = estrutura_ficha(ficha);
