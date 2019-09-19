@@ -30,22 +30,81 @@ for(var i = anoPrimeiraCopa; i <= anoUltimaCopa; i+=4) {
 
 // Exercício 3
 // --------------------------------
-
 document.getElementById('calcular').onclick = function() {
     var nota1 = parseFloat( document.getElementById('nota1').value );
     var nota2 = parseFloat( document.getElementById('nota2').value );
     var numFaltas = parseFloat( document.getElementById('n_faltas').value );
 
     var media = (nota1 + nota2) / 2;
-    var freqMinima = 14;
+    var numMaxFaltas = 6;
 
-    console.log(media);
-
-    if(media >= 6.5 && numFaltas >= freqMinima) {
+    if(media >= 6.5 && numFaltas <= numMaxFaltas) {
         document.getElementById('result').innerHTML = 'Aprovado';   
-    } else if(media >= 6.5 && numFaltas <= freqMinima) {
+    } else if(media <= 6.5 && numFaltas <= numMaxFaltas) {
+        document.getElementById('result').innerHTML = 'Reprovado por nota';   
+    }else if(media >= 6.5 && numFaltas >= numMaxFaltas) {
         document.getElementById('result').innerHTML = 'Reprovado por n de faltas';           
     } else {
         document.getElementById('result').innerHTML = 'Totalmente reprovado';   
     }
 };
+
+// Exercício 4
+// --------------------------------
+var vendas_cursos = [
+
+    {
+        'aluno': 'Emmanuel Gomes',
+        'data': '10/06/2018',
+        'valor': 34.99,
+        'reembolso': null
+        
+    },
+
+    {
+        'aluno': 'Carla Dias',
+        'data': '10/06/2018',
+        'valor': 29.99,
+        'reembolso': null
+        
+    },
+
+    {
+        'aluno': 'Rafael Marques',
+        'data': '11/06/2018',
+        'valor': 39.99,
+        'reembolso': '13/06/2018'
+        
+    },
+
+    {
+        'aluno': 'Maria Isabel Pereira',
+        'data': '11/06/2018',
+        'valor': 29.99,
+        'reembolso': null
+        
+    },
+
+    {
+        'aluno': 'Andre Luis Silva',
+        'data': '12/06/2018',
+        'valor': 34.99,
+        'reembolso': null
+        
+    }
+
+];
+
+var total = 0;
+var tBody = document.getElementById('vendas_cursos');
+tBody.innerHTML = '';
+
+for(var a = 0; a < vendas_cursos.length; a++) {
+    if( !vendas_cursos[a].reembolso ) {
+        tBody.innerHTML += '<tr> <td>' + vendas_cursos[a].aluno + '</td> <td>' + vendas_cursos[a].data + '</td> <td>' + vendas_cursos[a].valor + '</td> </tr>'; 
+        
+        total += vendas_cursos[a].valor;
+    }                
+}
+
+document.getElementById('total_vendas').innerHTML = '<strong>' + total + '</strong>';
