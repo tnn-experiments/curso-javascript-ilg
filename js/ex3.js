@@ -108,3 +108,24 @@ for(var a = 0; a < vendas_cursos.length; a++) {
 }
 
 document.getElementById('total_vendas').innerHTML = '<strong>' + total + '</strong>';
+
+// Correção
+// var total_vendas = 0;
+// document.getElementById('vendas_cursos').innerHTML = '';
+
+// for(var b = 0; b < vendas_cursos.length; b++) {
+//     if(vendas_cursos[b].reembolso == null) {
+//         total_vendas += vendas_cursos[b].valor;
+
+//         var linhaHTML = '';
+//         linhaHTML += '<tr>';
+//         linhaHTML +=    '<td>' + vendas_cursos[b].aluno + '</td>';
+//         linhaHTML +=    '<td>' + vendas_cursos[b].data + '</td>';
+//         linhaHTML +=    '<td>' + vendas_cursos[b].valor + '</td>';
+//         linhaHTML += '</tr>';
+
+//         document.getElementById('vendas_cursos').innerHTML += linhaHTML;
+//     }
+// }
+
+// document.getElementById('total_vendas').innerHTML = total_vendas;
