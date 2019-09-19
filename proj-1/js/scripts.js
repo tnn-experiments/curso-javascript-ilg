@@ -21,10 +21,27 @@ var aboutUs = {
   "Valores": "<ul><li>Comprometimento</li><li>Inovação</li><li>Ética profissional</li><li>Superação dos resultados</li><li>Melhoria contínua</li></ul>"
 };
 
-var unseletected_color = "#646872";
-var seletected_color = "#2A2D34";
+var unselected_color = "#646872";
+var selected_color = "#2A2D34";
 
+var about_tags = document.getElementsByClassName('single-tab');
 
+for(var i=0; i<about_tags.length; i++) {
+  about_tags[i].onclick = function() {
+    
+    for(var x=0; x<about_tags.length; x++) {
+      about_tags[x].style['background-color'] = unselected_color;
+      about_tags[x].style['font-weight'] = 'bold';
+    }
+    
+    this.style['background-color'] = selected_color;
+    this.style['font-weight'] = 'bold';
+
+    var selecionado = this.innerHTML;
+
+    document.getElementById('box-text').innerHTML = aboutUs[selecionado];
+  }
+}
 
 // Slider de serviços
 
