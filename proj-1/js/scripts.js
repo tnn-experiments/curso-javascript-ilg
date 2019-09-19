@@ -94,11 +94,7 @@ document.getElementById('service-next').onclick = function() {
 }
 
 // Data Footer
+var ano_atual = new Date;
+ano_atual = ano_atual.getFullYear();
 
-
-
-  
-   
-
-
-   
+document.getElementById('current_year').innerHTML = ano_atual;
