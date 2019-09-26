@@ -40,3 +40,24 @@ var inter = window.setInterval(function() {
         window.clearInterval(inter);
     }
 },1000);
+
+// desafio relogio
+window.setInterval(function(){
+    var hora_atual = new Date();
+    var horas = hora_atual.getHours();
+    var minutos = hora_atual.getMinutes();
+    var segundos = hora_atual.getSeconds();
+
+    function format_time(time) {
+        if(time >= 0 && time <= 9) {
+            var formatted_time = time.toString();
+            formatted_time = '0' + formatted_time;
+        } else {
+            var formatted_time = time.toString();
+        }
+
+        return formatted_time;
+    }
+    
+    document.getElementById('relogio').innerHTML = format_time(horas) + ':' + format_time(minutos) + ':' + format_time(segundos);
+},1000);
