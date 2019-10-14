@@ -9,6 +9,7 @@ $(function(){
 // gerar gráficos em JS: https://www.highcharts.com/demo
 
 // http://dataservice.accuweather.com/currentconditions/v1/45881?apikey=gRTwpZJ2ZR05SIgO9Z2mWenYRu8sMkH7&language=pt-br
+// http://www.geoplugin.net/json.gp?ip=xx.xx.xx.xx
 
 var accuweatherAPIKey = 'gRTwpZJ2ZR05SIgO9Z2mWenYRu8sMkH7';
 
@@ -45,7 +46,32 @@ function pegarLocalUsuario(lat, long) {
 
 }
 
-pegarLocalUsuario(-22.929116, -43.172736);
+function pegarCoordenadasDoIp(){
+ 
+    $.ajax({
+        var lat_padrao = -22.981361;
+        var long_padrao = -43.223176;
+        
+        url: 'http://www.geoplugin.net/json.gp',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+        
+            if(data.geoplugin_latitude && data.geoplugin_longitude) {
+                pegarLocalUsuario(data.geoplugin_latitude, data.geoplugin_longitude);
+            } else {
+                pegarLocalUsuario(lat_padrao, long_padrao);
+            }
+        
+        },
+        error: function(){
+            console.log('erro');
+            pegarLocalUsuario(lat_padrao, long_padrao);
+        }
+    });    
 
+}
+
+pegarCoordenadasDoIp();
 
 });
