@@ -12,6 +12,24 @@ $(function(){
 // http://www.geoplugin.net/json.gp?ip=xx.xx.xx.xx
 
 var accuweatherAPIKey = 'gRTwpZJ2ZR05SIgO9Z2mWenYRu8sMkH7';
+var weatherObject = {
+    cidade: '',
+    estado: '',
+    pais: '',
+    temperatura: '',
+    texto_clima: '',
+    icone_clima: ''
+}
+
+function preencherClimaAgora(cidade, estado, pais, temperatura, texto_clima, icone_clima){
+
+    var texto_local = cidade + ', ' + estado + '. ' + pais;
+
+    $('#texto_local').text(texto_local);
+    $('#texto_clima').text(texto_clima);
+    $('#texto_temperatura').html( String(temperatura) + '&deg;' );
+
+}
 
 function pegarTempoAtual(localCode) {
 
@@ -20,7 +38,12 @@ function pegarTempoAtual(localCode) {
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            console.log(data);
+
+            weatherObject.temperatura = data[0].Temperature.Metric.Value;
+            weatherObject.temperatura = data[0].WeatherText;
+            weatherObject.icone_clima = '';
+
+            preencherClimaAgora(weatherObject.cidade, weatherObject.estado, weatherObject.pais, weatherObject.temperatura, weatherObject.texto_clima, weatherObject.icone_clima);
         },
         error: function(){
             console.log('erro');
@@ -36,6 +59,17 @@ function pegarLocalUsuario(lat, long) {
         type: 'GET',
         dataType: 'json',
         success: function(data){
+
+            try {
+                weatherObject.cidade = 'data.ParentCity.LocalizedName';
+            } 
+            catch {
+                weatherObject.cidade = 'data.LocalizedName';
+            }
+
+            weatherObject.estado = data.AdministrativeArea.LocalizedName;
+            weatherObject.pais = data.Country.LocalizedName;
+
             var localCode = data.Key; 
             pegarTempoAtual(localCode);
         },
@@ -47,15 +81,18 @@ function pegarLocalUsuario(lat, long) {
 }
 
 function pegarCoordenadasDoIp(){
+
+    var lat_padrao = -22.981361;
+    var long_padrao = -43.223176;
  
     $.ajax({
-        var lat_padrao = -22.981361;
-        var long_padrao = -43.223176;
         
         url: 'http://www.geoplugin.net/json.gp',
         type: 'GET',
         dataType: 'json',
         success: function(data){
+
+            console.log('pegarCoordenadasDoIp');
         
             if(data.geoplugin_latitude && data.geoplugin_longitude) {
                 pegarLocalUsuario(data.geoplugin_latitude, data.geoplugin_longitude);
