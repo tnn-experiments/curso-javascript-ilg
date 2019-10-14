@@ -61,10 +61,10 @@ function pegarLocalUsuario(lat, long) {
         success: function(data){
 
             try {
-                weatherObject.cidade = 'data.ParentCity.LocalizedName';
+                weatherObject.cidade = data.ParentCity.LocalizedName;
             } 
             catch {
-                weatherObject.cidade = 'data.LocalizedName';
+                weatherObject.cidade = data.LocalizedName;
             }
 
             weatherObject.estado = data.AdministrativeArea.LocalizedName;
