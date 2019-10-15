@@ -12,6 +12,8 @@ $(function(){
 // http://www.geoplugin.net/json.gp?ip=xx.xx.xx.xx
 
 var accuweatherAPIKey = 'gRTwpZJ2ZR05SIgO9Z2mWenYRu8sMkH7';
+var mapboxToken = 'pk.eyJ1IjoidGhlYW5kZXJzb25uIiwiYSI6ImNrMXJvZWxqYzA3ZjAzYmxnamdxMjI3aG0ifQ.mD4zWxibiFtGHbvHJ1OZxA';
+
 var weatherObject = {
     cidade: '',
     estado: '',
@@ -199,6 +201,26 @@ function pegarLocalUsuario(lat, long) {
 
 }
 
+function pegarCoordenadasDaPesquisa(input) {
+
+    input = encodeURI(input);
+
+    $.ajax({
+        url: 'https://api.mapbox.com/geocoding/v5/mapbox.places/' + input + '.json?access_token=' + mapboxToken,
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+
+            console.log('mapbox', data);
+
+        },
+        error: function(){
+            console.log('erro');
+        }
+    });
+
+}
+
 function pegarCoordenadasDoIp(){
 
     var lat_padrao = -22.981361;
@@ -229,5 +251,15 @@ function pegarCoordenadasDoIp(){
 }
 
 pegarCoordenadasDoIp();
+
+$('#search-button').click(function(){
+    var local = $('input#local').val();
+
+    if(local){
+        pegarCoordenadasDaPesquisa(local);
+    } else {
+        alert('Local inválido');
+    }
+});
 
 });
