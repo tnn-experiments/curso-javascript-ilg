@@ -75,7 +75,6 @@ function pegarPrevisaoHoraHora(localCode) {
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            console.log('pegarPrevisaoHoraHora', data);
 
             var horarios = [];
             var temperaturas = [];
@@ -93,7 +92,7 @@ function pegarPrevisaoHoraHora(localCode) {
             }
         },
         error: function(){
-            $('.refresh-loader').fadeOut();
+            gerarErro('Erro ao obter previsão hora a hora');
         }
     });    
 }
@@ -136,12 +135,11 @@ function pegarPrevisao5Dias(localCode){
         type: 'GET',
         dataType: 'json',
         success: function(data){
-            console.log('pegarPrevisao5Dias', data);
             $('#texto_max_min').html( String(data.DailyForecasts[0].Temperature.Minimum.Value) + '&deg; / ' + String(data.DailyForecasts[0].Temperature.Maximum.Value) + '&deg;' );
             preencherPrevisao5Dias(data.DailyForecasts);
         },
         error: function(){
-            $('.refresh-loader').fadeOut();
+            gerarErro('Erro ao obter a previsão de 5 dias');
         }
     });
     
@@ -165,7 +163,7 @@ function pegarTempoAtual(localCode) {
             preencherClimaAgora(weatherObject.cidade, weatherObject.estado, weatherObject.pais, weatherObject.temperatura, weatherObject.texto_clima, weatherObject.icone_clima);
         },
         error: function(){
-            $('.refresh-loader').fadeOut();
+            gerarErro('Erro ao obter clima atual');
         }
     });
 
@@ -196,7 +194,7 @@ function pegarLocalUsuario(lat, long) {
             pegarPrevisaoHoraHora(localCode);
         },
         error: function(){
-            $('.refresh-loader').fadeOut();
+            gerarErro('Erro no código do local');
         }
     });
 
@@ -212,19 +210,36 @@ function pegarCoordenadasDaPesquisa(input) {
         dataType: 'json',
         success: function(data){
 
-            console.log('mapbox', data);
-
-            var long = data.features[0].geometry.coordinates[0];
-            var lat = data.features[0].geometry.coordinates[1];
-
-            pegarLocalUsuario(lat, long);
+            try {
+                var long = data.features[0].geometry.coordinates[0];
+                var lat = data.features[0].geometry.coordinates[1];
+                pegarLocalUsuario(lat, long);                
+            } 
+            
+            catch {
+                gerarErro('Erro na pesquisa de local');
+            }
 
         },
         error: function(){
-            $('.refresh-loader').fadeOut();
+            gerarErro('Erro na Pesquisa de local');
         }
     });
 
+}
+
+function gerarErro(mensagem){
+    if(!mensagem) {
+        mensagem = 'Erro na solicitação';
+    }
+
+    $('.refresh-loader').hide();
+    $('#aviso-erro').text(mensagem);
+    $('#aviso-erro').slideDown();
+
+    window.setTimeout(function(){
+        $('#aviso-erro').slideUp();
+    },4000);
 }
 
 function pegarCoordenadasDoIp(){
@@ -238,8 +253,6 @@ function pegarCoordenadasDoIp(){
         type: 'GET',
         dataType: 'json',
         success: function(data){
-
-            console.log('pegarCoordenadasDoIp');
         
             if(data.geoplugin_latitude && data.geoplugin_longitude) {
                 pegarLocalUsuario(data.geoplugin_latitude, data.geoplugin_longitude);
@@ -249,7 +262,6 @@ function pegarCoordenadasDoIp(){
         
         },
         error: function(){
-            console.log('erro');
             pegarLocalUsuario(lat_padrao, long_padrao);
         }
     });    
