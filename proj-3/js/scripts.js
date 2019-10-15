@@ -88,11 +88,12 @@ function pegarPrevisaoHoraHora(localCode) {
                 temperaturas.push( data[a].Temperature.Value );
 
                 gerarGrafico(horarios, temperaturas);
+                $('.refresh-loader').fadeOut();
 
             }
         },
         error: function(){
-            console.log('erro');
+            $('.refresh-loader').fadeOut();
         }
     });    
 }
@@ -140,7 +141,7 @@ function pegarPrevisao5Dias(localCode){
             preencherPrevisao5Dias(data.DailyForecasts);
         },
         error: function(){
-            console.log('erro');
+            $('.refresh-loader').fadeOut();
         }
     });
     
@@ -164,7 +165,7 @@ function pegarTempoAtual(localCode) {
             preencherClimaAgora(weatherObject.cidade, weatherObject.estado, weatherObject.pais, weatherObject.temperatura, weatherObject.texto_clima, weatherObject.icone_clima);
         },
         error: function(){
-            console.log('erro');
+            $('.refresh-loader').fadeOut();
         }
     });
 
@@ -195,7 +196,7 @@ function pegarLocalUsuario(lat, long) {
             pegarPrevisaoHoraHora(localCode);
         },
         error: function(){
-            console.log('erro');
+            $('.refresh-loader').fadeOut();
         }
     });
 
@@ -213,9 +214,14 @@ function pegarCoordenadasDaPesquisa(input) {
 
             console.log('mapbox', data);
 
+            var long = data.features[0].geometry.coordinates[0];
+            var lat = data.features[0].geometry.coordinates[1];
+
+            pegarLocalUsuario(lat, long);
+
         },
         error: function(){
-            console.log('erro');
+            $('.refresh-loader').fadeOut();
         }
     });
 
@@ -253,12 +259,26 @@ function pegarCoordenadasDoIp(){
 pegarCoordenadasDoIp();
 
 $('#search-button').click(function(){
+    $('.refresh-loader').show();
     var local = $('input#local').val();
 
     if(local){
         pegarCoordenadasDaPesquisa(local);
     } else {
         alert('Local inválido');
+    }
+});
+
+$('input#local').on('keypress', function(e){
+    if(e.which == 13) {
+        $('.refresh-loader').show();
+        var local = $('input#local').val();
+
+        if(local){
+            pegarCoordenadasDaPesquisa(local);
+        } else {
+            alert('Local inválido');
+        }
     }
 });
 
