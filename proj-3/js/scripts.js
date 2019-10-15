@@ -32,6 +32,69 @@ function preencherClimaAgora(cidade, estado, pais, temperatura, texto_clima, ico
 
 }
 
+function gerarGrafico(horas, temperaturas){
+
+    Highcharts.chart('hourly_chart', {
+        chart: {
+            type: 'line'
+        },
+        title: {
+            text: 'Temperatura Hora a hora'
+        },
+        xAxis: {
+            categories: horas
+        },
+        yAxis: {
+            title: {
+                text: 'Temperatura (°C)'
+            }
+        },
+        plotOptions: {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        },
+        series: [{
+            showInLegend: false,
+            data: temperaturas
+        }]
+    });
+
+}
+
+function pegarPrevisaoHoraHora(localCode) {
+    // http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/127164?apikey=gRTwpZJ2ZR05SIgO9Z2mWenYRu8sMkH7&language=pt-br&metric=true
+
+    $.ajax({
+        url: 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/' + localCode + '?apikey=' + accuweatherAPIKey + '&language=pt-br&metric=true',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            console.log('pegarPrevisaoHoraHora', data);
+
+            var horarios = [];
+            var temperaturas = [];
+
+            for(var a = 0; a < data.length; a++) {
+
+                var hora = new Date( data[a].DateTime ).getHours();
+                horarios.push( String(hora) + 'h' );
+
+                temperaturas.push( data[a].Temperature.Value );
+
+                gerarGrafico(horarios, temperaturas);
+
+            }
+        },
+        error: function(){
+            console.log('erro');
+        }
+    });    
+}
+
 function preencherPrevisao5Dias(previsoes) {
     $('#info_5dias').html('');
     var diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
@@ -124,8 +187,10 @@ function pegarLocalUsuario(lat, long) {
             weatherObject.pais = data.Country.LocalizedName;
 
             var localCode = data.Key; 
+            
             pegarTempoAtual(localCode);
             pegarPrevisao5Dias(localCode);
+            pegarPrevisaoHoraHora(localCode);
         },
         error: function(){
             console.log('erro');
