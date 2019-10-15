@@ -34,9 +34,11 @@ function preencherClimaAgora(cidade, estado, pais, temperatura, texto_clima, ico
 
 function preencherPrevisao5Dias(previsoes) {
     $('#info_5dias').html('');
+    var diasSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
     for(a = 0; a < previsoes.length; a++) {
-        var dia_semana = 'dia semana';
+        var dataHoje = new Date(previsoes[a].Date);
+        var dia_semana = diasSemana[ dataHoje.getDay() ];
         var iconNumber = previsoes[a].Day.Icon <= 9 ? '0' + String(previsoes[a].Day.Icon) : String(previsoes[a].Day.Icon);
 
         iconeClima = 'https://developer.accuweather.com/sites/default/files/' + iconNumber + '-s.png';   
